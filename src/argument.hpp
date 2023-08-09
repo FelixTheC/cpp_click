@@ -12,43 +12,19 @@ namespace click
 {
     
     template<typename T>
-    class Argument : ClickArgument
+    class Argument : public ClickArgument
     {
-    private:
-        std::string name_;
-        uint nargs_ = 1;
-        std::function<T(std::string)> parser_;
-        T value_;
-        
     public:
         explicit Argument(std::string name,
-                          std::function<T(std::string)> parser) : name_(std::move(name)), parser_(std::move(parser)) {};
+                          std::function<T(std::string)> &&parser) : ClickArgument(std::move(name), std::move(parser)) {};
 
         Argument(std::string name,
                  uint nargs,
-                 std::function<T(std::string)> parser) : name_(std::move(name)), nargs_(nargs), parser_(std::move(parser)) {};
-        
+                 std::function<T(std::string)> &&parser) : ClickArgument(std::move(name), nargs, std::move(parser)) {};
+
         ~Argument() = default;
-        
-        std::string get_name()
-        {
-            return name_;
-        }
-        
-        uint get_nargs()
-        {
-            return nargs_;
-        }
-        
-        T get_value()
-        {
-            return value_;
-        }
-        
-        void set_value(std::string &val)
-        {
-            value_ = parser_(std::move(val));
-        }
+//        Argument& operator=(Argument const &other) = default;
+//        Argument& operator=(Argument&& other) = default;
     };
 }
 

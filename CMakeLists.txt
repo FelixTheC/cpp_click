@@ -22,7 +22,8 @@ if ("$ENV{TESTING}")
             src/option.hpp
             tests/testmain.cpp
             tests/test_click.cpp
-            tests/test_click_option.cpp)
+            tests/test_click_option.cpp
+            tests/test_click_argument.cpp)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE gtest_main)
 

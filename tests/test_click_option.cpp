@@ -67,3 +67,12 @@ TEST(test_click_option, move_option)
     ASSERT_EQ(other_option.get_value(), 1);
     ASSERT_TRUE(simple_option.get_name().empty());
 }
+
+TEST(test_click_option, click_option_set_value)
+{
+    auto simple_option = click::Option<int>("--n",
+                                            [](const std::string &val) -> int {return std::stoi(val);});
+    
+    simple_option.set_value("1234");
+    ASSERT_EQ(simple_option.get_value(), 1234);
+}

@@ -3,8 +3,22 @@
 //
 
 #include <ranges>
-#include <algorithm>
 #include "gtest/gtest.h"
+#include "../src/click.hpp"
+
+using ClickArg = click::ClickArgument;
+using StrArg = click::Argument<std::string>;
+
+TEST(click, add_click_arguments_only)
+{
+    auto click_obj = click::Click();
+    
+    auto clickArg = std::make_unique<ClickArg>(StrArg("bar", [](const std::string &val) -> std::string {return val;}));
+    click_obj.arguments.emplace_back(std::move(clickArg));
+    
+    auto tmp = &click_obj.arguments[0];
+    ASSERT_EQ(tmp->get()->get_name(), "bar");
+}
 
 //TEST(click_argument, click_argument_parsing)
 //{

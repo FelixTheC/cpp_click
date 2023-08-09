@@ -11,7 +11,7 @@ namespace click
 {
     
     template<typename T>
-    class Option : ClickOption
+    class Option : public ClickOption
     {
     private:
         bool show_default_ = false;
@@ -83,7 +83,7 @@ namespace click
             other.parser_ = {};
         }
         
-        void set_value(std::string &arg)
+        void set_value(std::string arg)
         {
             value_ = parser_(std::move(arg));
             value_is_set_ = true;
