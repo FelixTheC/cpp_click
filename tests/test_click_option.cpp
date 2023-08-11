@@ -4,20 +4,20 @@
 
 TEST(test_click_option, create_click_option)
 {
-    auto simple_option = click::Option("--n",
+    auto simple_option = click::Option("--num",
                                        [](const std::string &val) -> int {return std::stoi(val);});
     
-    ASSERT_EQ(simple_option.get_name(), "--n");
+    ASSERT_EQ(simple_option.get_name(), "--num");
     ASSERT_TRUE(simple_option.get_short_name().empty());
 }
 
 TEST(test_click_option, create_option_with_short_name)
 {
-    auto simple_option = click::Option("--n",
+    auto simple_option = click::Option("--num",
                                        "-n",
                                        [](const std::string &val) -> int {return std::stoi(val);});
 
-    ASSERT_EQ(simple_option.get_name(), "--n");
+    ASSERT_EQ(simple_option.get_name(), "--num");
     ASSERT_EQ(simple_option.get_short_name(), "-n");
 }
 
@@ -27,7 +27,7 @@ TEST(test_click_option, create_option_with_help_text)
                                        [](const std::string &val) -> int {return std::stoi(val);});
     
     simple_option.set_help_text("lorem ipsum");
-    ASSERT_EQ(simple_option.help_text(), "lorem ipsum");
+    ASSERT_EQ(simple_option.help_text(), "--n      lorem ipsum");
 }
 
 TEST(test_click_option, create_option_with_default)

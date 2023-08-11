@@ -5,37 +5,52 @@
 #include <ranges>
 #include "gtest/gtest.h"
 #include "../src/click.hpp"
-#include "../src/option.hpp"
 
 using ClickArg = click::Argument;
 using ClickOpt = click::Option;
 
 TEST(click, add_click_arguments_only)
 {
-    auto click_obj = click::Click();
+    auto click_obj = click::Click("Test");
     click_obj.arguments.emplace_back(
             std::make_unique<ClickArg>(
                     ClickArg("bar", [](const std::string &val) -> std::string {return val;})
                     )
             );
     
-    auto tmp = &click_obj.arguments[0];
-    ASSERT_EQ(tmp->get()->get_name(), "bar");
-    ASSERT_EQ(click_obj.options.size(), 0);
+    
+    ASSERT_EQ(click_obj.arguments.size(), 1);
+    ASSERT_EQ(click_obj.options.size(), 1);
 }
 
-//TEST(click, add_click_options_only)
-//{
-//    auto click_obj = click::Click();
-//    click_obj.options.emplace_back(
-//            std::make_unique<ClickOpt>(
-//                    StrOpt("bar", [](const std::string &val) -> std::string {return val;})
-//            )
-//    );
-//
-//    auto tmp = &click_obj.options[0];
-//    ASSERT_EQ(*tmp->get_help_text(), "bar");
-//}
+TEST(click, add_click_options_only)
+{
+    auto click_obj = click::Click("Test");
+    click_obj.options.emplace_back(
+            std::make_unique<ClickOpt>(
+                    ClickOpt("bar", [](const std::string &val) -> std::string {return val;})
+            )
+    );
+    
+    ASSERT_EQ(click_obj.arguments.size(), 0);
+    ASSERT_EQ(click_obj.options.size(), 2);
+}
+
+TEST(click, default_help_text)
+{
+    // display_help_text calls exit(1), to test this properly comment these lines and run this test alone
+    GTEST_SKIP();
+    char* terminal_params[] = {"./main", "--help"};
+    
+    auto click_obj = click::Click("Test");
+    testing::internal::CaptureStdout();
+    
+    click_obj.parse_commandline_args(2, terminal_params);
+    
+    std::string output = testing::internal::GetCapturedStdout();
+    
+    ASSERT_TRUE(output.find("Usage: Test [Options]") != std::string::npos);
+}
 
 //TEST(click, click_argument_parsing)
 //{

@@ -136,20 +136,22 @@ namespace click
         
         std::string help_text()
         {
-            if (!help_text_.empty())
-            {
-                return help_text_;
-            }
-            
             std::stringstream sstream;
             sstream << name_;
             sstream << " ";
-            sstream << "<" << default_value_.type().name() << ">";
-            
-            if (!default_val_str.empty())
+            if (!help_text_.empty())
             {
                 sstream << "     ";
-                sstream << "[default: " << default_val_str << "]";
+                sstream << help_text_;
+            }
+            else
+            {
+                sstream << "<" << default_value_.type().name() << ">";
+                if (!default_val_str.empty())
+                {
+                    sstream << "     ";
+                    sstream << "[default: " << default_val_str << "]";
+                }
             }
             
             return sstream.str();
