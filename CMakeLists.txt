@@ -34,7 +34,6 @@ else ()
             src/click.cpp
             src/click.cpp
             src/option.hpp
-            src/base.hpp
             src/argument.hpp)
 endif ()
 

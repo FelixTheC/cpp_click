@@ -5,22 +5,39 @@
 #include <ranges>
 #include "gtest/gtest.h"
 #include "../src/click.hpp"
+#include "../src/option.hpp"
 
-using ClickArg = click::ClickArgument;
-using StrArg = click::Argument<std::string>;
+using ClickArg = click::Argument;
+using ClickOpt = click::Option;
 
 TEST(click, add_click_arguments_only)
 {
     auto click_obj = click::Click();
-    
-    auto clickArg = std::make_unique<ClickArg>(StrArg("bar", [](const std::string &val) -> std::string {return val;}));
-    click_obj.arguments.emplace_back(std::move(clickArg));
+    click_obj.arguments.emplace_back(
+            std::make_unique<ClickArg>(
+                    ClickArg("bar", [](const std::string &val) -> std::string {return val;})
+                    )
+            );
     
     auto tmp = &click_obj.arguments[0];
     ASSERT_EQ(tmp->get()->get_name(), "bar");
+    ASSERT_EQ(click_obj.options.size(), 0);
 }
 
-//TEST(click_argument, click_argument_parsing)
+//TEST(click, add_click_options_only)
+//{
+//    auto click_obj = click::Click();
+//    click_obj.options.emplace_back(
+//            std::make_unique<ClickOpt>(
+//                    StrOpt("bar", [](const std::string &val) -> std::string {return val;})
+//            )
+//    );
+//
+//    auto tmp = &click_obj.options[0];
+//    ASSERT_EQ(*tmp->get_help_text(), "bar");
+//}
+
+//TEST(click, click_argument_parsing)
 //{
 //    {
 //        auto arg = click::Argument<bool>("verbose",

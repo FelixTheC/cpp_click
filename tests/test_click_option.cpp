@@ -4,75 +4,71 @@
 
 TEST(test_click_option, create_click_option)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            [](const std::string &val) -> int {return std::stoi(val);});
+    auto simple_option = click::Option("--n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
     
-    ASSERT_NO_FATAL_FAILURE(simple_option.help_text());
+    ASSERT_EQ(simple_option.get_name(), "--n");
+    ASSERT_TRUE(simple_option.get_short_name().empty());
 }
 
 TEST(test_click_option, create_option_with_short_name)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            "-n",
-                                            [](const std::string &val) -> int {return std::stoi(val);});
-    
+    auto simple_option = click::Option("--n",
+                                       "-n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
+
     ASSERT_EQ(simple_option.get_name(), "--n");
     ASSERT_EQ(simple_option.get_short_name(), "-n");
 }
 
 TEST(test_click_option, create_option_with_help_text)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            "",
-                                            "lorem ipsum",
-                                            [](const std::string &val) -> int {return std::stoi(val);});
+    auto simple_option = click::Option("--n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
     
+    simple_option.set_help_text("lorem ipsum");
     ASSERT_EQ(simple_option.help_text(), "lorem ipsum");
 }
 
 TEST(test_click_option, create_option_with_default)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            "",
-                                            "",
-                                            10,
-                                            [](const std::string &val) -> int {return std::stoi(val);});
+    auto simple_option = click::Option("--n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
     
-    ASSERT_EQ(simple_option.get_value(), 10);
+    simple_option.set_default_value<int>(10);
+    ASSERT_EQ(simple_option.get_value<int>(), 10);
 }
 
 TEST(test_click_option, create_option_with_visible_default)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            "",
-                                            "",
-                                            1,
-                                            true,
-                                            [](const std::string &val) -> int {return std::stoi(val);});
+    auto simple_option = click::Option("--n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
     
+    simple_option.set_default_value<int>(3);
+
     ASSERT_NO_FATAL_FAILURE(simple_option.help_text());
+    ASSERT_TRUE(simple_option.help_text().find("--n") < std::string::npos);
+    ASSERT_TRUE(simple_option.help_text().find("[default: 3]") < std::string::npos);
 }
 
 TEST(test_click_option, move_option)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            "",
-                                            "",
-                                            1,
-                                            true,
-                                            [](const std::string &val) -> int {return std::stoi(val);});
+    auto simple_option = click::Option("--n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
     
-    click::Option<int> other_option = std::move(simple_option);
+    simple_option.set_default_value<int>(42);
     
-    ASSERT_EQ(other_option.get_value(), 1);
+    click::Option other_option = std::move(simple_option);
+
+    ASSERT_EQ(other_option.get_value<int>(), 42);
     ASSERT_TRUE(simple_option.get_name().empty());
 }
 
 TEST(test_click_option, click_option_set_value)
 {
-    auto simple_option = click::Option<int>("--n",
-                                            [](const std::string &val) -> int {return std::stoi(val);});
-    
+    auto simple_option = click::Option("--n",
+                                       [](const std::string &val) -> int {return std::stoi(val);});
+
     simple_option.set_value("1234");
-    ASSERT_EQ(simple_option.get_value(), 1234);
+    ASSERT_EQ(simple_option.get_value<int>(), 1234);
 }
