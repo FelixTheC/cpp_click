@@ -45,11 +45,41 @@ TEST(click, default_help_text)
     auto click_obj = click::Click("Test");
     testing::internal::CaptureStdout();
     
-    click_obj.parse_commandline_args(2, terminal_params);
+//    click_obj.parse_commandline_args(2, terminal_params);
     
     std::string output = testing::internal::GetCapturedStdout();
     
     ASSERT_TRUE(output.find("Usage: Test [Options]") != std::string::npos);
+}
+
+TEST(click, click_parse_cmd_line_arg_simple_short_option)
+{
+    char* terminal_params[] = {"./main", "-w"};
+    auto result = click::parse_commandline_args(2, terminal_params);
+    
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(std::get<0>(result[0]), "-w");
+    ASSERT_TRUE(std::get<1>(result[0]).empty());
+}
+
+TEST(click, click_parse_cmd_line_arg_simple_short_option_with_equal)
+{
+    char* terminal_params[] = {"./main", "-u=name"};
+    auto result = click::parse_commandline_args(2, terminal_params);
+    
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(std::get<0>(result[0]), "-u");
+    ASSERT_EQ(std::get<1>(result[0]), "name");
+}
+
+TEST(click, click_parse_cmd_line_arg_simple_short_option_with_single_space_value)
+{
+    char* terminal_params[] = {"./main", "-u", "name"};
+    auto result = click::parse_commandline_args(3, terminal_params);
+    
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(std::get<0>(result[0]), "-u");
+    ASSERT_EQ(std::get<1>(result[0]), "name");
 }
 
 //TEST(click, click_argument_parsing)

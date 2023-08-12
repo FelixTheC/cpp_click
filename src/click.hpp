@@ -16,6 +16,8 @@ using ClickOpt = click::Option;
 
 namespace click
 {
+    [[ nodiscard ]]std::vector<std::tuple<std::string, std::string>> parse_commandline_args(int argv, char *argc[]) noexcept;
+    
     struct Click
     {
         std::string project_name = {};
@@ -29,8 +31,6 @@ namespace click
             options.emplace_back(std::make_unique<ClickOpt>(std::move(help_options)));
         };
         ~Click() = default;
-        
-        void parse_commandline_args(int argv, char *argc[]);
         
         std::optional<std::unique_ptr<click::Option>> get_option(const std::string &name) noexcept;
         std::optional<std::unique_ptr<click::Argument>> get_argument(const std::string &name) noexcept;
