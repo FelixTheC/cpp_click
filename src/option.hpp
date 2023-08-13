@@ -40,19 +40,22 @@ namespace click
     public:
         Option(Option &&other) noexcept
           {
-            default_val_str = other.default_val_str;
             value_is_set_ = other.value_is_set_;
+            is_flag_ = other.is_flag_;
+            name_ = other.name_;
+            default_val_str = other.default_val_str;
             param_name_ = other.param_name_;
             param_name_short_ = other.param_name_short_;
-            help_text_ = other.param_name_short_;
+            help_text_ = other.help_text_;
             value_ = other.value_;
             default_value_ = other.default_value_;
             parser_ = other.parser_;
             
+            other.value_is_set_ = {};
+            other.is_flag_ = false;
+            other.name_ = {};
             other.default_val_str = {};
-            other.value_is_set_ = false;
-            other.param_name_ = {};
-            other.param_name_short_ = {};
+            other.help_text_ = {};
             other.help_text_ = {};
             other.value_ = {};
             other.default_value_ = {};
@@ -83,11 +86,13 @@ namespace click
         
         Option& operator=(Option const &other)
         {
-            default_val_str = other.default_val_str;
             value_is_set_ = other.value_is_set_;
+            is_flag_ = other.is_flag_;
+            name_ = other.name_;
+            default_val_str = other.default_val_str;
             param_name_ = other.param_name_;
             param_name_short_ = other.param_name_short_;
-            help_text_ = other.param_name_short_;
+            help_text_ = other.help_text_;
             value_ = other.value_;
             default_value_ = other.default_value_;
             parser_ = other.parser_;
@@ -97,19 +102,22 @@ namespace click
         
         Option& operator=(Option&& other) noexcept
         {
-            default_val_str = other.default_val_str;
             value_is_set_ = other.value_is_set_;
-            param_name_ = std::move(other.param_name_);
-            param_name_short_ = std::move(other.param_name_short_);
-            help_text_ = std::move(other.param_name_short_);
+            is_flag_ = other.is_flag_;
+            name_ = other.name_;
+            default_val_str = other.default_val_str;
+            param_name_ = other.param_name_;
+            param_name_short_ = other.param_name_short_;
+            help_text_ = other.help_text_;
             value_ = other.value_;
             default_value_ = other.default_value_;
-            parser_ = std::move(other.parser_);
+            parser_ = other.parser_;
             
+            other.value_is_set_ = {};
+            other.is_flag_ = false;
+            other.name_ = {};
             other.default_val_str = {};
-            other.value_is_set_ = false;
-            other.param_name_ = {};
-            other.param_name_short_ = {};
+            other.help_text_ = {};
             other.help_text_ = {};
             other.value_ = {};
             other.default_value_ = {};

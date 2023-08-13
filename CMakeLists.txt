@@ -23,7 +23,8 @@ if ("$ENV{TESTING}")
             tests/testmain.cpp
             tests/test_click.cpp
             tests/test_click_option.cpp
-            tests/test_click_argument.cpp)
+            tests/test_click_argument.cpp
+            src/utils.hpp)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE gtest_main)
 
@@ -34,7 +35,8 @@ else ()
             src/click.cpp
             src/click.cpp
             src/option.hpp
-            src/argument.hpp)
+            src/argument.hpp
+            src/utils.hpp)
 endif ()
 
 if ("$ENV{GCC}")
