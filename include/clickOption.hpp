@@ -2,6 +2,7 @@
 #ifndef CPP_CLICK_OPTION_HPP
 #define CPP_CLICK_OPTION_HPP
 
+#include <any>
 #include <functional>
 #include <sstream>
 #include <string>

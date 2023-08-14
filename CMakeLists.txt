@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(cpp_click VERSION 1.0 LANGUAGES CXX)
+project(cppclick VERSION 1.0 LANGUAGES CXX)
 
 if ("$ENV{TESTING}")
     enable_testing()
@@ -18,25 +18,22 @@ if ("$ENV{TESTING}")
 
     add_executable(${PROJECT_NAME}
             src/click.cpp
-            src/click.cpp
-            src/option.hpp
+            include/click.hpp
+            include/clickOption.hpp
+            include/clickArgument.hpp
             tests/testmain.cpp
             tests/test_click.cpp
             tests/test_click_option.cpp
             tests/test_click_argument.cpp
-            src/utils.hpp)
+            include/utils.hpp)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE gtest_main)
 
     include(GoogleTest)
     gtest_discover_tests(${PROJECT_NAME})
 else ()
-    add_library(${PROJECT_NAME} SHARED
-            src/click.cpp
-            src/click.cpp
-            src/option.hpp
-            src/argument.hpp
-            src/utils.hpp)
+    add_library(${PROJECT_NAME} src/click.cpp src/clickOption.cpp src/clickArgument.cpp)
+    target_include_directories(${PROJECT_NAME} PUBLIC include)
 endif ()
 
 if ("$ENV{GCC}")
@@ -58,8 +55,11 @@ endif ()
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 set_target_properties(${PROJECT_NAME} PROPERTIES
+                        PUBLIC_HEADER "include/clickOption.hpp;include/clickArgument.hpp;include/click.hpp"
                         VERSION ${PROJECT_VERSION}
                         CXX_STANDARD 20
                         CXX_STANDARD_REQUIRED ON
                         CXX_EXTENSIONS NO
                         )
+
+install(TARGETS ${PROJECT_NAME})

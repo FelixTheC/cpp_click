@@ -9,8 +9,8 @@
 #include <variant>
 #include <vector>
 
-#include "argument.hpp"
-#include "option.hpp"
+#include "clickArgument.hpp"
+#include "clickOption.hpp"
 
 using ClickOpt = click::Option;
 

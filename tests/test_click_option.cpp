@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../src/option.hpp"
+#include "../include/clickOption.hpp"
 
 
 TEST(test_click_option, create_click_option)

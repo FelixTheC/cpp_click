@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include "../src/argument.hpp"
+#include "../include/clickArgument.hpp"
 
 TEST(click_argument, create_click_argument)
 {

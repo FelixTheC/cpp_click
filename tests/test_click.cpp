@@ -4,7 +4,7 @@
 
 #include <ranges>
 #include "gtest/gtest.h"
-#include "../src/click.hpp"
+#include "../include/click.hpp"
 
 using ClickArg = click::Argument;
 using ClickOpt = click::Option;
