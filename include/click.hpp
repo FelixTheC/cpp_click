@@ -33,6 +33,7 @@ namespace click
     
     struct Click
     {
+        bool help_called = false;
         std::string project_name = {};
         std::vector<std::unique_ptr<click::Option>> options {};
         std::vector<std::unique_ptr<click::Argument>> arguments {};

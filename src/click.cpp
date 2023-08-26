@@ -6,6 +6,7 @@
 
 void click::Click::parse_commandline_args(int argv, char *argc[])
 {
+    bool help_called_ = false;
     auto cmd_args = click::parse_commandline_args(argv, argc);
     std::vector<std::tuple<std::string, std::string>> parsed_args {};
     std::vector<std::tuple<std::string, std::string>> parsed_options {};
@@ -25,7 +26,7 @@ void click::Click::parse_commandline_args(int argv, char *argc[])
     
     cmd_args.clear();
     
-    if (!arguments.empty() && parsed_args.size() != arguments.size())
+    if (!arguments.empty() && !parsed_args.empty() && (parsed_args.size() != arguments.size()))
     {
         auto start_missing = arguments.size() - argv;
         std::stringstream missing_args;
@@ -39,18 +40,21 @@ void click::Click::parse_commandline_args(int argv, char *argc[])
         throw click::MissingArgument(missing_args.str());
     }
     
-    size_t idx = 0;
-    std::for_each(arguments.begin(), arguments.end(),
-                  [&idx, &parsed_args](const std::unique_ptr<click::Argument> &arg){
-        arg->set_value(std::get<0>(parsed_args[idx]));
-        ++idx;
-    });
+    if (!parsed_args.empty())
+    {
+        size_t idx = 0;
+        std::for_each(arguments.begin(), arguments.end(),
+                      [&idx, &parsed_args](const std::unique_ptr<click::Argument> &arg){
+                          arg->set_value(std::get<0>(parsed_args[idx]));
+                          ++idx;
+                      });
+    }
     
     std::for_each(options.begin(), options.end(),
-                  [&parsed_options](const std::unique_ptr<click::Option> &opt)
+                  [&parsed_options, &help_called_](const std::unique_ptr<click::Option> &opt)
                   {
                     std::for_each(parsed_options.begin(), parsed_options.end(),
-                                  [&opt](auto &val)
+                                  [&opt, &help_called_](auto &val)
                                   {
                                     const auto opt_name = std::get<0>(val);
                                     auto is_short_option = std::count(opt_name.begin(), opt_name.end(), '-') == 1;
@@ -66,11 +70,17 @@ void click::Click::parse_commandline_args(int argv, char *argc[])
                                       {
                                           if (opt->get_param_name() == opt_name)
                                           {
+                                              if (opt_name == "--help")
+                                              {
+                                                  help_called_ = true;
+                                              }
                                               opt->set_value(std::get<1>(val));
                                           }
                                       }
                                   });
                   });
+    
+    this->help_called = help_called_;
 }
 
 std::optional<std::unique_ptr<click::Option>> click::Click::get_option(const std::string &name) noexcept
@@ -122,13 +132,13 @@ std::optional<std::unique_ptr<click::Argument>> click::Click::get_argument(const
 void click::Click::display_help_text()
 {
     std::stringstream sstream;
-    sstream << "Usage: Test [Options]";
+    sstream << "Usage: " << project_name << " [Options]";
     sstream << "\n\n";
     sstream << "Options:\n";
     
     std::for_each(options.rbegin(),
                   options.rend(),
-                  [&sstream](const std::unique_ptr<click::Option> &elem){sstream << elem->help_text();});
+                  [&sstream](const std::unique_ptr<click::Option> &elem){sstream << elem->help_text() << "\n";});
     
     std::cout << sstream.str() << "\n";
     

@@ -229,3 +229,26 @@ TEST(click, click_parse_cmd_line_with_terminator)
     auto option_result = clk.get_option("user");
     ASSERT_EQ(option_result->get()->get_value<int>(), 1234);
 }
+
+TEST(click, click_calling_help)
+{
+    char* terminal_params[] = {"./main", "--help"};
+    
+    auto clk = click::Click("my_proj");
+    clk.arguments.emplace_back(
+            std::make_unique<click::Argument>(
+                    click::Argument("server", [](const std::string &val){return val;})
+            ));
+    clk.options.emplace_back(
+            std::make_unique<click::Option>(
+                    click::Option("w", [](const std::string &val){return val;})
+            ));
+    clk.options.emplace_back(
+            std::make_unique<click::Option>(
+                    click::Option("user", [](const std::string &val) -> int {return std::stoi(val);})
+            ));
+    
+    ASSERT_NO_FATAL_FAILURE(clk.parse_commandline_args(2, terminal_params));
+    ASSERT_TRUE(clk.help_called);
+    
+}
