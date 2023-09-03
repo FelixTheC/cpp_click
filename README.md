@@ -6,6 +6,14 @@ currently following features in a simple version are implemented
 - options
 - arguments
 
+## How to install via conan
+- install [conan](https://docs.conan.io/2/installation.html)
+- clone project via git
+- in the project DIR run
+```shell
+conan create . -s build_type=Release
+```
+
 ## How to use
 ```c++
 #include <filesystem>
