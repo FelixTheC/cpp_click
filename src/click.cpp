@@ -164,7 +164,7 @@ std::vector<std::tuple<std::string, std::string>> click::parse_commandline_args(
         if(is_short_option && cmd_line_elem.size() > 2 && split_idx == std::string::npos)
         {
             auto tmp = cmd_line_elem.substr(0, 2);
-            param_value = std::move(cmd_line_elem.substr(2));
+            param_value = cmd_line_elem.substr(2);
             cmd_line_elem = std::move(tmp);
             
             result.emplace_back(std::tie(cmd_line_elem, param_value));
@@ -174,7 +174,7 @@ std::vector<std::tuple<std::string, std::string>> click::parse_commandline_args(
         if (split_idx < std::string::npos)
         {
             auto tmp = cmd_line_elem.substr(0, split_idx);
-            param_value = std::move(cmd_line_elem.substr(split_idx + 1));
+            param_value = cmd_line_elem.substr(split_idx + 1);
             cmd_line_elem = std::move(tmp);
         }
         else if (std::find(cmd_line_elem.begin(), cmd_line_elem.end(), '-') == cmd_line_elem.end())

@@ -23,9 +23,9 @@ namespace click
     
     public:
         explicit MissingArgument(std::string msg) : message(std::move(msg)) {}
-        std::string what()
+        [[nodiscard]] const char* what() const noexcept override
         {
-            return message;
+            return message.c_str();
         }
     };
     

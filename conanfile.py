@@ -4,7 +4,7 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 class cppclickRecipe(ConanFile):
     name = "cppclick"
-    version = "1.0.3"
+    version = "1.0.4"
 
     # Optional metadata
     license = "MIT"
