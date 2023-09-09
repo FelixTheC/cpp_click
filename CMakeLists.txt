@@ -16,9 +16,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             -Wcast-align
             -Wfloat-conversion
             -fno-omit-frame-pointer
-            -fsanitize=address
     )
-    target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+    target_link_options(${PROJECT_NAME} PRIVATE)
 endif ()
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
